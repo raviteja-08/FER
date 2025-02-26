@@ -1,60 +1,42 @@
-{
-    "review": "100",
-    "emotion": "neutral"
-}
-{
-    "review": "101",
-    "emotion": "happy"
-}
-{
-    "review": "102",
-    "emotion": "angry"
-}
-{
-    "review": "jdfjfhjccd",
-    "emotion": "neutral"
-}
-{
-    "review": "jdfjfhjccd",
-    "emotion": "neutral"
-}
-{
-    "review": "1023",
-    "emotion": "neutral"
-}
-{
-    "review": "hhhh",
-    "emotion": "neutral"
-}
-{
-    "review": "jjjbbb",
-    "emotion": "neutral"
-}
-{
-    "review": "2000",
-    "emotion": "neutral"
-}
-{
-    "review": "0",
-    "emotion": "neutral"
-}
-{
-    "review": "090",
-    "emotion": "happy"
-}
-{
-    "review": "100",
-    "emotion": "angry"
-}
-{
-    "review": "uuu",
-    "emotion": "neutral"
-}
-{
-    "review": "jj",
-    "emotion": "happy"
-}
-{
-    "review": "jjpredicted_emotiongggghhhhhh",
-    "emotion": "angry"
-}
+[
+    {
+        "product_id": "1",
+        "review": "good product",
+        "emotion": "happy"
+    },
+    {
+        "product_id": "2",
+        "review": "use less product",
+        "emotion": "angry"
+    },
+    {
+        "product_id": "2",
+        "review": "good",
+        "emotion": "neutral"
+    },
+    {
+        "product_id": "4",
+        "review": "super product",
+        "emotion": "neutral"
+    },
+    {
+        "product_id": "5",
+        "review": "amazing product",
+        "emotion": "surprise"
+    },
+    {
+        "product_id": "6",
+        "review": "use less product ,don't buy",
+        "emotion": "angry"
+    },
+    {
+        "product_id": "7",
+        "review": "super product nice experiance",
+        "emotion": "neutral"
+    },
+    {
+        "product_id": "7",
+        "review": "amazing product",
+        "emotion": "happy"
+    }
+]
