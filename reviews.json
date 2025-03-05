@@ -38,5 +38,63 @@
         "product_id": "7",
         "review": "amazing product",
         "emotion": "happy"
+    },
+    {
+        "product_id": "100",
+        "review": "good prodt",
+        "emotion": "neutral"
+    },
+    {
+        "product_id": "101",
+        "review": "waste product",
+        "emotion": "sad"
+    },
+    {
+        "product_id": "102",
+        "review": "good product",
+        "emotion": "sad"
+    },
+    {
+        "product_id": "102",
+        "review": "good product",
+        "emotion": "neutral"
+    },
+    {
+        "product_id": "121",
+        "review": "nice",
+        "emotion": "sad"
+    },
+    {
+        "product_id": "343",
+        "review": "good",
+        "emotion": "neutral"
+    },
+    {
+        "product_id": "121",
+        "review": "this product is not nice",
+        "emotion": "happy"
+    },
+    {
+        "product_id": "120",
+        "review": "perfect product",
+        "emotion": "neutral"
+    },
+    {
+        "product_id": "120",
+        "review": "gjjjjbbvjfjvfjbvjfvgvgjfjvjnjffj",
+        "emotion": "angry"
+    },
+    {
+        "product_id": "100",
+        "review": "hhdjdnnjdjncncjdncjcnjcncjfbjdf kjjkbjfbjvfdjjbmhhmfvhbdhm",
+        "emotion": "angry"
+    },
+    {
+        "product_id": "100",
+        "review": "hdhdbbdbdbbbbbbbbbbbbbbbbb",
+        "emotion": "happy"
     }
-]
+]{
+    "review": "10000",
+    "emotion": "happy"
+}
