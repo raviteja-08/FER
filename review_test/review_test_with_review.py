@@ -10,22 +10,19 @@ from collections import Counter
 import tkinter as tk
 from tkinter import scrolledtext, messagebox
 from tkinter import ttk
-from PIL import Image, ImageTk
 
 # Load model
-model = model_from_json(open("Facial Expression Recognition.json", "r").read())
+model = model_from_json(open("../configs/Facial Expression Recognition.json", "r").read())
 model.load_weights('fer.h5')
 
-face_haar_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+face_haar_cascade = cv2.CascadeClassifier('../configs/haarcascade_frontalface_default.xml')
 
 recording = False
 emotions_counter = Counter()
-cap = cv2.VideoCapture(0)
-predicted_emotion = "None"
-faces_data = []
 
 def detect_emotion():
-    global recording, emotions_counter, predicted_emotion, faces_data
+    global recording, emotions_counter
+    cap = cv2.VideoCapture(0)
     emotions_counter.clear()
     
     while recording:
@@ -36,9 +33,8 @@ def detect_emotion():
         gray_img = cv2.cvtColor(test_img, cv2.COLOR_BGR2GRAY)
         faces_detected = face_haar_cascade.detectMultiScale(gray_img, 1.32, 5)
 
-        faces_data = []
         for (x, y, w, h) in faces_detected:
-            roi_gray = gray_img[y:y+h, x:x+w]
+            roi_gray = gray_img[y:y+w, x:x+h]
             roi_gray = cv2.resize(roi_gray, (48, 48))
             img_pixels = image.img_to_array(roi_gray)
             img_pixels = np.expand_dims(img_pixels, axis=0)
@@ -50,25 +46,11 @@ def detect_emotion():
             predicted_emotion = emotions[max_index]
             if predicted_emotion != 'neutral':
                 emotions_counter[predicted_emotion] += 1
-            
-            faces_data.append((x, y, w, h, predicted_emotion))
         
         time.sleep(1)
-
-def update_camera():
-    ret, frame = cap.read()
-    if ret:
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        for (x, y, w, h, emotion) in faces_data:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.putText(frame, emotion, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-        
-        frame = cv2.resize(frame, (200, 150))
-        img = Image.fromarray(frame)
-        imgtk = ImageTk.PhotoImage(image=img)
-        camera_label.imgtk = imgtk
-        camera_label.configure(image=imgtk)
-    camera_label.after(10, update_camera)
+    
+    cap.release()
+    cv2.destroyAllWindows()
 
 def start_recording(event):
     global recording
@@ -88,8 +70,8 @@ def save_review_to_json(product_id, review_text, emotion):
     }
     
     try:
-        if os.path.exists("reviews.json") and os.stat("reviews.json").st_size > 0:
-            with open("reviews.json", "r") as file:
+        if os.path.exists("../reviews.json") and os.stat("../reviews.json").st_size > 0:
+            with open("../reviews.json", "r") as file:
                 try:
                     reviews = json.load(file)
                     if not isinstance(reviews, list):
@@ -103,7 +85,7 @@ def save_review_to_json(product_id, review_text, emotion):
 
     reviews.append(review_data)
 
-    with open("reviews.json", "w") as file:
+    with open("../reviews.json", "w") as file:
         json.dump(reviews, file, indent=4)
     
     messagebox.showinfo("Success", "Review saved successfully!")
@@ -128,7 +110,7 @@ def load_reviews():
         widget.destroy()
     
     try:
-        with open("reviews.json", "r") as file:
+        with open("../reviews.json", "r") as file:
             reviews = json.load(file)
             if not isinstance(reviews, list):
                 reviews = []
@@ -146,41 +128,30 @@ def load_reviews():
 # GUI Setup
 root = tk.Tk()
 root.title("Product Review System")
-root.geometry("600x600")
+root.geometry("500x600")
 root.configure(bg='#222')
 
-frame_main = tk.Frame(root, bg="#222")
-frame_main.pack(pady=10)
-
-frame_left = tk.Frame(frame_main, bg="#222")
-frame_left.pack(side=tk.LEFT, padx=10)
-
-frame_right = tk.Frame(frame_main, bg="#222")
-frame_right.pack(side=tk.RIGHT, padx=10)
-
 # Product ID Entry
-tk.Label(frame_left, text="Enter Product ID:", fg="white", bg="#222", font=("Arial", 12, "bold")).pack(pady=5)
-product_id_entry = tk.Entry(frame_left, width=50, fg="white", bg="black", insertbackground="white", font=("Arial", 12))
+tk.Label(root, text="Enter Product ID:", fg="white", bg="#222", font=("Arial", 12, "bold")).pack(pady=5)
+product_id_entry = tk.Entry(root, width=50, fg="white", bg="black", insertbackground="white", font=("Arial", 12))
 product_id_entry.pack(pady=5)
 
 # Review Entry
-review_entry = scrolledtext.ScrolledText(frame_left, wrap=tk.WORD, width=50, height=5, fg="white", bg="black", insertbackground="white", font=("Arial", 12))
+tk.Label(root, text="Enter your product review:", fg="white", bg="#222", font=("Arial", 12, "bold")).pack(pady=5)
+review_entry = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=50, height=5, fg="white", bg="black", insertbackground="white", font=("Arial", 12))
 review_entry.pack(pady=5)
 review_entry.bind("<KeyPress>", start_recording)
 
-# Camera Preview
-camera_label = tk.Label(frame_right, bg="black")
-camera_label.pack()
-update_camera()
-
 # Submit Button
-tk.Button(frame_left, text="Submit Review", command=submit_review, fg="white", bg="#444", font=("Arial", 12, "bold")).pack(pady=10)
+submit_button = tk.Button(root, text="Submit Review", command=submit_review, fg="white", bg="#444", font=("Arial", 12, "bold"))
+submit_button.pack(pady=10)
 
 # Emotion Label
-emotion_label = tk.Label(frame_right, text="Detected Emotion: None", font=("Arial", 12, "bold"), fg="white", bg="#222")
-emotion_label.pack()
+emotion_label = tk.Label(root, text="Detected Emotion: None", font=("Arial", 12, "bold"), fg="white", bg="#222")
+emotion_label.pack(pady=5)
 
 # Reviews Section
+tk.Label(root, text="Previous Reviews:", fg="white", bg="#222", font=("Arial", 12, "bold")).pack()
 reviews_frame = tk.Frame(root, bg="#222")
 reviews_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 load_reviews()

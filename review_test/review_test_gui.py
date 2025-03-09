@@ -2,16 +2,18 @@ import os
 import cv2
 import json
 import numpy as np
+import time
 from keras.models import model_from_json
 from tensorflow.keras.preprocessing import image
 from collections import Counter
-import time
+import tkinter as tk
+from tkinter import scrolledtext, messagebox
 
 # Load model
-model = model_from_json(open("Facial Expression Recognition.json", "r").read())
+model = model_from_json(open("../configs/Facial Expression Recognition.json", "r").read())
 model.load_weights('fer.h5')
 
-face_haar_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+face_haar_cascade = cv2.CascadeClassifier('../configs/haarcascade_frontalface_default.xml')
 
 def detect_emotion():
     cap = cv2.VideoCapture(0)
@@ -37,7 +39,8 @@ def detect_emotion():
             max_index = np.argmax(predictions[0])
             emotions = ('angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral')
             predicted_emotion = emotions[max_index]
-            emotions_counter[predicted_emotion] += 1
+            if predicted_emotion!='neutral':
+                emotions_counter[predicted_emotion] += 1
         
         time.sleep(1)  # Capture emotion every second
     
@@ -53,14 +56,40 @@ def save_review_to_json(review_text, emotion):
         "emotion": emotion
     }
     
-    with open("reviews.json", "a") as file:
+    with open("../reviews.json", "a") as file:
         json.dump(review_data, file, indent=4)
         file.write("\n")
     
-    print("Review saved successfully!")
+    messagebox.showinfo("Success", "Review saved successfully!")
 
-if __name__ == "__main__":
-    user_review = input("Enter your product review: ")
+def submit_review():
+    user_review = review_entry.get("1.0", tk.END).strip()
+    if not user_review:
+        messagebox.showwarning("Warning", "Please enter a review.")
+        return
     detected_emotion = detect_emotion()
     save_review_to_json(user_review, detected_emotion)
-    print(f"Detected Emotion: {detected_emotion}")
+    emotion_label.config(text=f"Detected Emotion: {detected_emotion}")
+
+# GUI Setup
+root = tk.Tk()
+root.title("Product Review System")
+root.geometry("500x400")
+root.configure(bg='#222')  # Dark background
+
+# Label with white text
+tk.Label(root, text="Enter your product review:", fg="white", bg="#222", font=("Arial", 12, "bold")).pack(pady=5)
+
+# Text box with white text and black background
+review_entry = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=50, height=5, fg="white", bg="black", insertbackground="white", font=("Arial", 12))
+review_entry.pack(pady=5)
+
+# Submit button
+submit_button = tk.Button(root, text="Submit Review", command=submit_review, fg="white", bg="#444", font=("Arial", 12, "bold"))
+submit_button.pack(pady=10)
+
+# Emotion label
+emotion_label = tk.Label(root, text="Detected Emotion: None", font=("Arial", 12, "bold"), fg="white", bg="#222")
+emotion_label.pack(pady=5)
+
+root.mainloop()

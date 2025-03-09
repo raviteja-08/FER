@@ -13,10 +13,10 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 
 # Load model
-model = model_from_json(open("Facial Expression Recognition.json", "r").read())
+model = model_from_json(open("../configs/Facial Expression Recognition.json", "r").read())
 model.load_weights('fer.h5')
 
-face_haar_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+face_haar_cascade = cv2.CascadeClassifier('../configs/haarcascade_frontalface_default.xml')
 
 recording = False
 emotions_counter = Counter()
@@ -79,8 +79,8 @@ def save_review_to_json(product_id, review_text, emotion):
     }
     
     try:
-        if os.path.exists("reviews.json") and os.stat("reviews.json").st_size > 0:
-            with open("reviews.json", "r") as file:
+        if os.path.exists("../reviews.json") and os.stat("../reviews.json").st_size > 0:
+            with open("../reviews.json", "r") as file:
                 try:
                     reviews = json.load(file)
                     if not isinstance(reviews, list):
@@ -94,7 +94,7 @@ def save_review_to_json(product_id, review_text, emotion):
 
     reviews.append(review_data)
 
-    with open("reviews.json", "w") as file:
+    with open("../reviews.json", "w") as file:
         json.dump(reviews, file, indent=4)
     
     messagebox.showinfo("Success", "Review saved successfully!")
@@ -119,7 +119,7 @@ def load_reviews():
         widget.destroy()
     
     try:
-        with open("reviews.json", "r") as file:
+        with open("../reviews.json", "r") as file:
             reviews = json.load(file)
             if not isinstance(reviews, list):
                 reviews = []
