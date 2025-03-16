@@ -9,7 +9,7 @@ import time
 
 # Load model
 model = model_from_json(open("../configs/Facial Expression Recognition.json", "r").read())
-model.load_weights('fer.h5')
+model.load_weights('../models/fer.h5')
 
 face_haar_cascade = cv2.CascadeClassifier('../configs/haarcascade_frontalface_default.xml')
 
