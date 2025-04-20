@@ -1,0 +1,2 @@
+dataset = "https://www.kaggle.com/datasets/sudarshanvaidya/corrective-reannotation-of-fer-ck-kdef"
+focal_loss = "https://freedium.cfd/https://medium.com/swlh/focal-loss-what-why-and-how-df6735f26616"
