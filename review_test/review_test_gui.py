@@ -10,7 +10,7 @@ import tkinter as tk
 from tkinter import scrolledtext, messagebox
 
 # Load model
-model = model_from_json(open("../configs/Facial Expression Recognition.json", "r").read())
+model = model_from_json(open("../configs/Facial_Expression_Recognition.json", "r").read())
 model.load_weights('../models/fer.h5')
 
 face_haar_cascade = cv2.CascadeClassifier('../configs/haarcascade_frontalface_default.xml')

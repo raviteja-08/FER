@@ -23,5 +23,10 @@
         "product_id": "983247923",
         "review": "aisjdf askdffjas akjdsfljs",
         "emotion": "neutral"
+    },
+    {
+        "product_id": "0",
+        "review": "not good",
+        "emotion": "happy"
     }
 ]
